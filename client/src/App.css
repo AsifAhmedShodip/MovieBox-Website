@@ -1,0 +1,138 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Chelsea Market', cursive !important;
+	background: rgba(15, 32, 39, 1) !important; /* fallback for old browsers */
+	/*background: linear-gradient(to bottom, rgba(44, 83, 100, 1), rgba(32, 58, 67, 1), rgba(15, 32, 39, 1)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+button {
+	font-family: 'Chelsea Market', cursive;
+}
+
+
+
+.hero {
+	width: 100%;
+	height: 80vh;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.hero-details {
+	width: 50vw;
+	padding: 20vh 0 0 20vw;
+	height: 40rem;
+	overflow: hidden;
+}
+
+.hero-details h1 a,
+.hero-details p {
+	color: white;
+	letter-spacing: 1px;
+}
+
+.hero-details h1 a {
+	font-size: 45px;
+	text-decoration: none;
+}
+
+.hero-details p {
+	font-size: 15px;
+}
+
+.movie-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+	grid-gap: 1rem;
+	justify-items: center;
+}
+
+.grid-item-parent {
+	height: 18rem;
+	width: 12rem;
+	overflow: hidden;
+}
+
+.grid-item {
+	height: 100%;
+	background-color: rgba(44, 83, 100, 1);
+	position: relative;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	transition: transform .3s ease-in-out;
+}
+
+.grid-item:hover {
+	transform: scale(1.2);
+}
+
+.grid-item::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.grid-item:hover::before {
+	background-color: rgba(52, 73, 94, 0.85);
+}
+
+.grid-item-title-link {
+	color: black;
+	font-size: 30px;
+	font-weight: 600;
+	text-align: center;
+	width: 70%;
+	position: absolute;
+	top: 30%;
+	left: 15%;
+	right: 15%;
+	text-decoration: none;
+	display: none;
+}
+
+.grid-item:hover .grid-item-title-link {
+	font-size: 30px;
+	display: block;
+}
+
+.pagination {
+	padding: 5rem;
+}
+.pagination button {
+	color: white;
+	font-size: 18px;
+}
+.pagination li {
+	color: white;
+}
+.MuiPagination-root {
+	display: flex;
+	float: right;
+}
+
+.MuiPaginationItem-root {
+	color: white !important;
+}
+
+@media (max-width: 1199.98px) {
+	.navbar-nav {
+		background-color: rgba(15, 32, 39, 1);
+	}
+	.nav-link {
+		text-decoration: none;
+		margin: 0rem auto;
+		text-transform: uppercase;
+		font-size: 14px;
+		letter-spacing: 2px;
+	}
+}

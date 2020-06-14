@@ -1,0 +1,64 @@
+.nav-link {
+	text-decoration: none;
+	margin: 1rem 1rem;
+	text-transform: uppercase;
+	font-size: 16px;
+	letter-spacing: 2px;
+}
+
+.main-logo {
+	width: 50px;
+	transition: all 600ms ease-in-out;
+}
+
+.navbar-transparent{
+	background-color: transparent;
+	transition: all 400ms ease-in-out;
+}
+
+.navbar-color{
+	background: linear-gradient(to right, rgba(44, 83, 100, 1), rgba(32, 58, 67, 1), rgba(15, 32, 39, 1));
+	transition: all 400ms ease-in-out;
+}
+
+.navbar-color .main-logo{
+	width: 40px;
+	transition: all 400ms ease-in-out;
+}
+
+.navbar-color .nav-link {
+	text-decoration: none;
+	margin: 0rem 1rem;
+	text-transform: uppercase;
+	font-size: 14px;
+	letter-spacing: 2px;
+	transition: all 400ms ease-in-out;
+}
+
+.navbar .form-control{
+	width: 70% !important;
+	height: 2rem;
+	background-color: transparent;
+}
+
+.navbar .form-control:focus{
+	background-color: black;
+}
+
+
+
+/* form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+} */

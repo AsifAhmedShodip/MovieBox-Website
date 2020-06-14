@@ -1,0 +1,46 @@
+.search-page-container {
+	padding-top: 15vh;
+}
+
+.search-page-total-result {
+	color: white;
+}
+
+.search-page-hr {
+	background-color: white;  
+	opacity: .1;
+}
+
+.search-page-card-parent{
+	width: 100%;
+	position: relative;
+	display: flex;
+	margin: 1rem;
+}
+
+.search-page-card-image-div{
+	width: 15%;
+	background-color: azure;
+}
+
+.search-page-card-image{
+	width: 100%;
+}
+
+.search-page-card-details{
+	width: 85%;
+	margin: 1rem;
+	color: white;
+	display: flex;
+}
+
+.search-page-card-title a{
+	font-size: 20px;
+	color: white;
+}
+
+.search-page-card-date{
+	margin-left: 1rem;
+	color: #6c757d;
+	padding-top: .5rem;
+}
