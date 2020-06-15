@@ -6,15 +6,13 @@
 
 body {
 	font-family: 'Chelsea Market', cursive !important;
-	background: rgba(15, 32, 39, 1) !important; /* fallback for old browsers */
+	background: rgba(15, 32, 39, 1) !important;
 	/*background: linear-gradient(to bottom, rgba(44, 83, 100, 1), rgba(32, 58, 67, 1), rgba(15, 32, 39, 1)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 button {
 	font-family: 'Chelsea Market', cursive;
 }
-
-
 
 .hero {
 	width: 100%;
