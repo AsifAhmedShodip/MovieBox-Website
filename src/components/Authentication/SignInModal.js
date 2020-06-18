@@ -11,15 +11,11 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
-import * as EmailValidator from 'email-validator'
-
 import firebase from '../../firebase'
 
-export default function SignUpModal(props) {
+export default function SignInModal(props) {
 	const [ email, setEmail ] = useState('')
-	const [ username, setUsername ] = useState('')
 	const [ password, setPassword ] = useState('')
-	const [ confirmPassword, setConfirmPassword ] = useState('')
 	const [ showAlert, setShowAlert ] = useState(false)
 	const [ alertMessage, setAlertMessage ] = useState('')
 	const [ spinner, setSpinner ] = useState(false)
@@ -28,50 +24,23 @@ export default function SignUpModal(props) {
 	let location = useLocation()
 	const params = new URLSearchParams(useLocation().search)
 
-	const validate = () => {
-		if (EmailValidator.validate(email) === false) {
-			setShowAlert(true)
-			setAlertMessage("Email Doesn't Exist")
-			setSpinner(false)
-			return false
-		} else if (password !== confirmPassword) {
-			setShowAlert(true)
-			setAlertMessage("Password Doesn't match")
-			setSpinner(false)
-			return false
-		}
-
-		return true
-	}
-
-	const signUpUser = (e) => {
+	const signInUser = (e) => {
 		e.preventDefault()
 		setSpinner(true)
-
-		if (validate()) {
-			firebase
-				.auth()
-				.createUserWithEmailAndPassword(email, password)
-				.then((res) => {
-					setShowAlert(true)
-					setAlertMessage('Accout is Created for ' + username)
-					setUsername('')
-					setEmail('')
-					setPassword('')
-					setConfirmPassword('')
-					setSpinner(false)
-
-					firebase.database().ref('users/' + res.user.uid).set({
-						email,
-						username
-					})
-				})
-				.catch(function(error) {
-					setShowAlert(true)
-					setAlertMessage(error.message)
-					setSpinner(false)
-				})
-		}
+		firebase
+			.auth()
+			.signInWithEmailAndPassword(email, password)
+			.then((res) => {
+				setSpinner(false)
+				setEmail('')
+				setPassword('')
+				onHideModal()
+			})
+			.catch(function(error) {
+				setShowAlert(true)
+				setAlertMessage(error.message)
+				setSpinner(false)
+			})
 	}
 
 	const onHideModal = () => {
@@ -79,7 +48,7 @@ export default function SignUpModal(props) {
 	}
 
 	return (
-		params.get('signup') &&
+		params.get('login') &&
 		createPortal(
 			<Modal
 				show={true}
@@ -89,32 +58,15 @@ export default function SignUpModal(props) {
 				centered
 			>
 				<Modal.Header closeButton>
-					<Modal.Title className="text-center w-100">
-						<h2>Create Account</h2>
-						<h6 className="font-weight-light">It's free and hardly takes more than 30 seconds.</h6>
+					<Modal.Title as="h3" className="text-center w-100">
+						Sign In
 					</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
 					<Row>
 						<Col xs={12} md={10} className="m-auto">
-							<Form onSubmit={signUpUser}>
-								<InputGroup className="mb-3">
-									<InputGroup.Prepend>
-										<InputGroup.Text id="basic-addon1">
-											<i class="fa fa-user" />
-										</InputGroup.Text>
-									</InputGroup.Prepend>
-									<Form.Control
-										type="name"
-										placeholder="Username"
-										name="username"
-										required
-										value={username}
-										onChange={(e) => setUsername(e.target.value)}
-									/>
-								</InputGroup>
-
+							<Form onSubmit={signInUser}>
 								<InputGroup className="mb-3">
 									<InputGroup.Prepend>
 										<InputGroup.Text id="basic-addon1">
@@ -149,31 +101,13 @@ export default function SignUpModal(props) {
 									/>
 								</InputGroup>
 
-								<InputGroup className="mb-3">
-									<InputGroup.Prepend>
-										<InputGroup.Text id="basic-addon1">
-											<i class="fa fa-check" />
-										</InputGroup.Text>
-									</InputGroup.Prepend>
-									<Form.Control
-										type="text"
-										placeholder="Confrim Password"
-										name="password"
-										required
-										pattern=".{8,16}"
-										title="8 to 16 characters"
-										value={confirmPassword}
-										onChange={(e) => setConfirmPassword(e.target.value)}
-									/>
-								</InputGroup>
-
-								<Button type="submit" className="btn btn-success btn-block btn-lg">
-									Sign Up
+								<Button type="submit" className="btn btn-success	 btn-block btn-lg">
+									Sign In{'        '}
 									{spinner ? (
 										<Spinner
 											as="span"
 											animation="border"
-											size="s"
+											size="sm"
 											role="status"
 											aria-hidden="true"
 											className={spinner}
@@ -191,17 +125,17 @@ export default function SignUpModal(props) {
 				</Modal.Body>
 
 				<Modal.Footer>
-					<div className="text-center w-100">
-						Already have an account?{' '}
-						<Link to={{ pathname: location.pathname, search: '?login=true' }}>
-							<Button variant="link" size="sm" onClick={props.userWantsToSignIn}>
-								Login Here
+					<div class="text-center w-100">
+						Doesn't have an account?{' '}
+						<Link to={{ pathname: location.pathname, search: '?signup=true' }}>
+							<Button variant="link" size="sm" onClick={props.userWantsToSignUp}>
+								Sign Up
 							</Button>
 						</Link>
 					</div>
 				</Modal.Footer>
 			</Modal>,
-			document.getElementById('modal_signup')
+			document.getElementById('modal_login')
 		)
 	)
 }

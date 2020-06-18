@@ -4,11 +4,12 @@ import Container from 'react-bootstrap/Container'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 
-import './SingleMoviePage.css'
-
 import SinglePageHero from './SinglePageHero'
 import Casts from './Casts'
 
+import './SingleMoviePage.css'
+
+import * as tmdb from '../utils/tmdbApiCall'
 
 export default function SinglemoviePage() {
 	const slug = useParams().slug
@@ -17,13 +18,8 @@ export default function SinglemoviePage() {
 	const [ key, setKey ] = useState('cast')
 
 	useEffect(() => {
-		fetch('/tmdb/movie?id=' + slug).then((res) => res.json()).then((json) => {
-			setMovie(json.movie)
-		})
-
-		fetch('/tmdb/credits?id=' + slug).then((res) => res.json()).then((json) => {
-			setCredits(json.credits)
-		})
+		tmdb.getMovieDetails(slug, (res) => setMovie(res.data))
+		tmdb.getCreditDetails(slug, (res) => setCredits(res.data))
 	}, [])
 
 	const loadCastCrew = (str) => {

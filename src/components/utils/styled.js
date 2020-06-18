@@ -20,4 +20,7 @@ const PosterStyled = styled.div`
 const CastCard = styled.div`
     background-image:   url("${props => props.img}");
 `
+
+
+
 export { HeroStyled, SinglePageHeroStyled, GridItemStyled,PosterStyled , CastCard}
