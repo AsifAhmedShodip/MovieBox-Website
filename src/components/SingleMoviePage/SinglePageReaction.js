@@ -3,15 +3,12 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa'
 import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Redirect } from 'react-router-dom'
 
-import SignInModal from '../Authentication/SignInModal'
 import { AuthContext } from '../context/AuthProvider'
 import firebase from '../../firebase'
 
 export default function SinglePageReaction({ movieId }) {
 	const [ liked, setLiked ] = useState('')
 	const [ disliked, setDisliked ] = useState('')
-	const [ isSignedIn, setIsSignedIn ] = useState(false)
-	const [ userId, setUserId ] = useState('')
 	const [ likeCount, setLikeCount ] = useState(0)
 	const [ dislikeCount, setDislikeCount ] = useState(0)
 
@@ -19,92 +16,58 @@ export default function SinglePageReaction({ movieId }) {
 	const location = useLocation()
 	let history = useHistory()
 
-	// useEffect(() => {
-	// 	// fetch('/movie/reaction/likecount?movieId=' + movieId).then((res) => res.json()).then((json) => {
-	// 	// 	if (json.success) {
-	// 	// 		setLikeCount(json.count)
-	// 	// 	}
-	// 	// })
-	// 	// fetch('/movie/reaction/dislikecount?movieId=' + movieId).then((res) => res.json()).then((json) => {
-	// 	// 	if (json.success) {
-	// 	// 		setDislikeCount(json.count)
-	// 	// 	}
-	// 	// })
-	// 	// verifyUser((result) => {
-	// 	// 	if (result.success) {
-	// 	// 		setIsSignedIn(true)
-	// 	// 		setUserId(result.userId)
-	// 	// 		fetch('/movie/reaction/likedislike?userId=' + result.userId + '&movieId=' + movieId)
-	// 	// 			.then((res) => res.json())
-	// 	// 			.then((json) => {
-	// 	// 				if (json.success) {
-	// 	// 					if (json.liked) {
-	// 	// 						setLiked('active')
-	// 	// 						setDisliked('')
-	// 	// 					} else if (json.disliked) {
-	// 	// 						setLiked('')
-	// 	// 						setDisliked('active')
-	// 	// 					}
-	// 	// 				}
-	// 	// 			})
-	// 	// 	} else {
-	// 	// 		setIsSignedIn(false)
-	// 	// 	}
-	// 	// })
-	// })
+	useEffect(() => {
+		firebase.database().ref('likes/' + movieId + '/').on('value', (snapshot) => {
+			setLikeCount(snapshot.numChildren())
+			if (currentUser) {
+				if (snapshot.hasChild(currentUser.uid)) {
+					setLiked('active')
+					setDisliked('')
+				}
+			}
+		})
+
+		firebase.database().ref('dislikes/' + movieId + '/').on('value', (snapshot) => {
+			setDislikeCount(snapshot.numChildren())
+			if (currentUser) {
+				if (snapshot.hasChild(currentUser.uid)) {
+					setLiked('')
+					setDisliked('active')
+				}
+			}
+		})
+	})
 
 	const handleLikeClick = () => {
 		if (currentUser) {
-			firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).set({
-				uid: currentUser.uid
-			})
+			if (liked === 'active') {
+				firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).remove()
+				setLiked('')
+			} else {
+				firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).set({
+					uid: currentUser.uid
+				})
+				firebase.database().ref('dislikes/' + movieId + '/' + currentUser.uid).remove()
+			}
 		} else {
-			console.log('Redirecting to  jj=')
 			history.push(`${location.pathname}?login=true`)
 		}
-		// if (isSignedIn) {
-		// 	fetch('/movie/reaction/liked', {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify({
-		// 			userId: userId,
-		// 			movieId: movieId
-		// 		})
-		// 	})
-		// 		.then((res) => res.json())
-		// 		.then((json) => {
-		// 			console.log(json)
-		// 			if (json.success) {
-		// 				setLiked('active')
-		// 				setDisliked('')
-		// 			}
-		// 		})
-		// }
 	}
 
 	const handleDislikeClick = () => {
-		// if (isSignedIn) {
-		// 	fetch('/movie/reaction/disliked', {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify({
-		// 			userId: userId,
-		// 			movieId: movieId
-		// 		})
-		// 	})
-		// 		.then((res) => res.json())
-		// 		.then((json) => {
-		// 			console.log(json)
-		// 			if (json.success) {
-		// 				setLiked('')
-		// 				setDisliked('active')
-		// 			}
-		// 		})
-		// }
+		if (currentUser) {
+			if (disliked === 'active') {
+				firebase.database().ref('dislikes/' + movieId + '/' + currentUser.uid).remove()
+				setDisliked('')
+			} else {
+				firebase.database().ref('dislikes/' + movieId + '/' + currentUser.uid).set({
+					uid: currentUser.uid
+				})
+				firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).remove()
+			}
+		} else {
+			history.push(`${location.pathname}?login=true`)
+		}
 	}
 
 	return (

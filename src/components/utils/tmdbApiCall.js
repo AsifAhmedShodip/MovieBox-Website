@@ -12,3 +12,8 @@ export function getCreditDetails(id, callback) {
 	let url = API_URL + 'movie/' + id + '/credits?api_key=' + API_KEY
 	axios.get(url).then((res) => callback(res))
 }
+
+export function getMovieRecommandations(id, callback) {
+	let url = API_URL + 'movie/' + id + '/recommendations?api_key=' + API_KEY + '&language=en-US'
+	axios.get(url).then((res) => callback(res))
+}
