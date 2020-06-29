@@ -3,12 +3,14 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa'
 import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Redirect } from 'react-router-dom'
 
+import styled from 'styled-components'
+
 import { AuthContext } from '../context/AuthProvider'
 import firebase from '../../firebase'
 
 export default function SinglePageReaction({ movieId }) {
-	const [ liked, setLiked ] = useState('')
-	const [ disliked, setDisliked ] = useState('')
+	const [ liked, setLiked ] = useState(false)
+	const [ disliked, setDisliked ] = useState(false)
 	const [ likeCount, setLikeCount ] = useState(0)
 	const [ dislikeCount, setDislikeCount ] = useState(0)
 
@@ -21,8 +23,8 @@ export default function SinglePageReaction({ movieId }) {
 			setLikeCount(snapshot.numChildren())
 			if (currentUser) {
 				if (snapshot.hasChild(currentUser.uid)) {
-					setLiked('active')
-					setDisliked('')
+					setLiked(true)
+					setDisliked(false)
 				}
 			}
 		})
@@ -31,8 +33,8 @@ export default function SinglePageReaction({ movieId }) {
 			setDislikeCount(snapshot.numChildren())
 			if (currentUser) {
 				if (snapshot.hasChild(currentUser.uid)) {
-					setLiked('')
-					setDisliked('active')
+					setLiked(false)
+					setDisliked(true)
 				}
 			}
 		})
@@ -42,7 +44,7 @@ export default function SinglePageReaction({ movieId }) {
 		if (currentUser) {
 			if (liked === 'active') {
 				firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).remove()
-				setLiked('')
+				setLiked(false)
 			} else {
 				firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).set({
 					uid: currentUser.uid
@@ -58,7 +60,7 @@ export default function SinglePageReaction({ movieId }) {
 		if (currentUser) {
 			if (disliked === 'active') {
 				firebase.database().ref('dislikes/' + movieId + '/' + currentUser.uid).remove()
-				setDisliked('')
+				setDisliked(false)
 			} else {
 				firebase.database().ref('dislikes/' + movieId + '/' + currentUser.uid).set({
 					uid: currentUser.uid
@@ -71,15 +73,38 @@ export default function SinglePageReaction({ movieId }) {
 	}
 
 	return (
-		<div className="single-page-like-dislike-icons">
-			<div className="single-page-like">
-				<FaThumbsUp className={'thumbs-up ' + liked} onClick={handleLikeClick} />
-				<span className="single-page-like-counts">{likeCount}</span>
+		<ReactionStyled>
+			<div>
+				<ThumbsUp active={liked} onClick={handleLikeClick} />
+				<CountStyled>{likeCount}</CountStyled>
 			</div>
-			<div className="single-page-disklike">
-				<span className="single-page-dislike-counts">{dislikeCount}</span>
-				<FaThumbsDown className={'thumbs-down ' + disliked} onClick={handleDislikeClick} />
+			<div>
+				<CountStyled>{dislikeCount}</CountStyled>
+				<ThumbsDown active={disliked} onClick={handleDislikeClick} />
 			</div>
-		</div>
+		</ReactionStyled>
 	)
 }
+
+const ReactionStyled = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 3px;
+`
+const CountStyled = styled.span`
+	color: white;
+	font-size: 14px;
+	margin: .5rem;
+`
+const ThumbsUp = styled(FaThumbsUp)`
+	font-size: 20px;
+	cursor: pointer;
+	color: ${(props) => (!props.active ? 'white' : 'burlywood')}
+`
+
+const ThumbsDown = styled(FaThumbsUp)`
+	font-size: 20px;
+	cursor: pointer;
+	color: ${(props) => (!props.active ? 'white' : 'burlywood')}
+`

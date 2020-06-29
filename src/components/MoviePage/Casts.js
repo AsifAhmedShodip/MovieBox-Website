@@ -1,8 +1,6 @@
 import React from 'react'
 import Slider from 'react-slick'
-import Tooltip from '@material-ui/core/Tooltip'
-
-import { CastCard } from '../utils/styled'
+import styled from 'styled-components'
 
 const IMAGE_URL = 'https://image.tmdb.org/t/p/'
 
@@ -90,15 +88,11 @@ var settings = {
 	]
 }
 
-const tooltipText = (name,character) => {
+const tooltipText = (name, character) => {
 	return (
-		<div className='cast-tooltip'>
-			<p className="cast-name">
-				{name}
-			</p>
-			<p className="cast-charecter">
-				{character}
-			</p>
+		<div className="cast-tooltip">
+			<p className="cast-name">{name}</p>
+			<p className="cast-charecter">{character}</p>
 		</div>
 	)
 }
@@ -110,12 +104,8 @@ export default function Casts({ casts }) {
 			if (cast.profile_path) {
 				const url = IMAGE_URL + 'original' + cast.profile_path
 				return (
-					<div className="cast-card-container">
-						<div className="cast-card-parent">
-							<Tooltip title={tooltipText(cast.name, cast.character)} placement="top" arrow>
-								<CastCard className="cast-card" img={url} />
-							</Tooltip>
-						</div>
+					<div className="pt-4 px-2">
+						<CastCardStyled img={url} />
 					</div>
 				)
 			}
@@ -125,12 +115,11 @@ export default function Casts({ casts }) {
 	return <Slider {...settings}>{arrayList}</Slider>
 }
 
-// cast_id: 17
-// character: "Tibbs"
-// credit_id: "5b2c11f70e0a262ced000536"
-// gender: 2
-// id: 1472892
-// name: "Alex Hernandez"
-// order: 8
-// profile_path: "/zxgVPvrxYoyAZw2RQSAluHEXzdZ.jpg"
-// __proto__: Object
+const CastCardStyled = styled.div`
+	background-image:   url("${(props) => props.img}");
+	height: 12rem;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	border-radius: .5rem;
+`
