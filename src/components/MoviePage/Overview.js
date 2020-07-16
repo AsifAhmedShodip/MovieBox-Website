@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { MdPlaylistAdd } from 'react-icons/md'
 
 import styled from 'styled-components'
 
 import SinglePageReaction from './Reaction'
+import WishListIcon from './WishListIcon'
 
 const IMAGE_URL = 'https://image.tmdb.org/t/p/'
 
@@ -16,9 +16,10 @@ export default function Overview({ movie }) {
 			<HeroDetailsStyled>
 				<Row className="justify-content-between">
 					<Col xs={6} sm={6} md={8} lg={9} xl={7}>
-						<h1>
+						<h1 className="d-inline">
 							<a href={'/movie/' + movie.id}>{movie.title}</a>
 						</h1>
+						<WishListIcon movieId={movie.id} />
 						<p> {movie.overview}</p>
 					</Col>
 					<Col xs={6} sm={6} md={4} lg={3} xl={5} className="d-flex justify-content-end">

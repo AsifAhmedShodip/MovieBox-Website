@@ -42,7 +42,7 @@ export default function SinglePageReaction({ movieId }) {
 
 	const handleLikeClick = () => {
 		if (currentUser) {
-			if (liked === 'active') {
+			if (liked) {
 				firebase.database().ref('likes/' + movieId + '/' + currentUser.uid).remove()
 				setLiked(false)
 			} else {
@@ -58,7 +58,7 @@ export default function SinglePageReaction({ movieId }) {
 
 	const handleDislikeClick = () => {
 		if (currentUser) {
-			if (disliked === 'active') {
+			if (disliked) {
 				firebase.database().ref('dislikes/' + movieId + '/' + currentUser.uid).remove()
 				setDisliked(false)
 			} else {

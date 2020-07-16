@@ -4,6 +4,7 @@ import { CustomPlaceholder } from 'react-placeholder-image'
 const IMAGE_URL = 'https://image.tmdb.org/t/p/'
 
 export default function SearchPageCard({ movie }) {
+    console.log(movie)
 	const url = IMAGE_URL + 'original' + movie.poster_path
 	const movie_url = '/movie/' + movie.id
 

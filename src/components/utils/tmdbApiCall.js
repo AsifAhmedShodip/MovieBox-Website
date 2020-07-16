@@ -17,3 +17,8 @@ export function getMovieRecommandations(id, callback) {
 	let url = API_URL + 'movie/' + id + '/recommendations?api_key=' + API_KEY + '&language=en-US'
 	axios.get(url).then((res) => callback(res))
 }
+
+export function getSearchResults(keyword, page,  callback) {
+	let url = API_URL + 'search/multi?api_key='+API_KEY+'&query=' + keyword + '&page=' + page
+	axios.get(url).then((res) => callback(res))
+}

@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col'
 
 import './SearchPage.css'
 import SearchPageCard from './SearchPageCard'
+import * as tmdb from '../utils/tmdbApiCall'
 
 export default function SearchPage() {
 	const slug = useParams().slug
@@ -15,11 +16,10 @@ export default function SearchPage() {
 	const [ totalResults, setTotalResults ] = useState(null)
 	const [ totalPages, setTotalPages ] = useState(null)
 	useEffect(() => {
-		fetch('/tmdb/search?keyword=' + slug + '&page=' + page).then((res) => res.json()).then((json) => {
-			console.log(json)
-			setResults(json.results.results)
-			setTotalResults(json.results.total_results)
-			setTotalPages(json.results.total_pages)
+		tmdb.getSearchResults(slug, page, (res) => {
+			setResults(res.data.results)
+			setTotalResults(res.data.total_results)
+			setTotalPages(res.data.total_pages)
 		})
 	}, [])
 

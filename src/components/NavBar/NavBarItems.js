@@ -26,16 +26,28 @@ export default function NavBarItems(props) {
 		return <SignInModal />
 	}
 
-	const SearchBox = () => {
+	const Auth = ({ currentUser }) => {
+		if (currentUser) {
+			functions.getUsername(props.currentUser.uid, (name) => setUserName(name))
+			return (
+				<React.Fragment>
+					<Nav.Link>{userName}</Nav.Link>
+					<Nav.Link onClick={() => firebase.auth().signOut()}>Log Out</Nav.Link>
+				</React.Fragment>
+			)
+		}
+
 		return (
+			<Link className="nav-link" to={{ pathname: location.pathname, search: '?login=true' }}>
+				Sign In
+			</Link>
+		)
+	}
+
+	return (
+		<React.Fragment>
 			<Form inline onSubmit={onFormSubmit}>
 				<InputGroup>
-					<InputGroup.Prepend>
-						<Button variant="outline-secondary" type="submit">
-							<i class="fa fa-search" />
-						</Button>
-					</InputGroup.Prepend>
-
 					<FormControl
 						type="text"
 						placeholder="Search"
@@ -43,28 +55,15 @@ export default function NavBarItems(props) {
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
 					/>
+					<InputGroup.Append>
+						<Button variant="outline-secondary" type="submit">
+							<i className="fa fa-search" />
+						</Button>
+					</InputGroup.Append>
 				</InputGroup>
 			</Form>
-		)
-	}
-
-	if (props.currentUser) {
-		functions.getUsername(props.currentUser.uid, (name) => setUserName(name))
-		return (
-			<React.Fragment>
-				<SearchBox />
-				<Nav.Link href="/news">News</Nav.Link>
-				<Nav.Link>{userName}</Nav.Link>
-				<Nav.Link onClick={() => firebase.auth().signOut()}>Log Out</Nav.Link>
-			</React.Fragment>
-		)
-	}
-
-	return (
-		<React.Fragment>
-			<SearchBox />
 			<Nav.Link href="/news">News</Nav.Link>
-			<Link className='nav-link' to={{ pathname: location.pathname, search: '?login=true' }}>Sign In</Link>
+			<Auth currentUser={props.currentUser} />
 		</React.Fragment>
 	)
 }
